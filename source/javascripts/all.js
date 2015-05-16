@@ -7,9 +7,12 @@ var Header = React.createClass({
 });
 
 var SearchBar = React.createClass({
+  inputSearchHandler: function() {
+    this.props.searchHandler(this.refs.searchKey.getDOMNode().value);
+  },
   render: function() {
     return (
-      <input type="search" class="searchbar" />
+      <input type="search" class="searchbar" ref="searchKey" onChange={this.inputSearchHandler} /> // When input change, we call the inputSearchHandler
     );
   }
 });
@@ -42,6 +45,9 @@ var EmployeeList = React.createClass({
 });
 
 var HomePage = React.createClass({
+  searchHandler: function(key) { //Search handler for Homepage
+    console.log("Key: "+key);
+  },
   render: function() {
     var employees = [
       {firstName: "Khoa", lastName: "Pham"},
@@ -50,7 +56,7 @@ var HomePage = React.createClass({
     return (
       <div class="inner-container">
         <Header text="Employee Directory"/>
-        <SearchBar />
+        <SearchBar searchHandler={this.searchHandler} /> 
         <EmployeeList employees={employees} />
       </div>
     );
