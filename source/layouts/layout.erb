@@ -8,7 +8,6 @@
 
     <!-- Use title if it's in the page YAML frontmatter -->
     <title><%= current_page.data.title || "React - Employee Directory" %></title>
-
     <%= stylesheet_link_tag "normalize", "all" %>
   </head>
 
@@ -17,6 +16,7 @@
 
     <%= javascript_include_tag "bower_components/react/react.min" %>
     <%= javascript_include_tag "bower_components/react/JSXTransformer" %>
-    <%= javascript_include_tag  "all" %>
+    <script type="text/jsx" src="javascripts/all.js"></script>
+
   </body>
 </html>
