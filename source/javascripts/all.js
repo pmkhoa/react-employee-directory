@@ -1,7 +1,7 @@
 var Header = React.createClass({
   render: function() {
     return (
-      <h1 class="title">{this.props.text}</h1>
+      <h1 className="title">{this.props.text}</h1>
     );
   }
 });
@@ -12,7 +12,7 @@ var SearchBar = React.createClass({
   },
   render: function() {
     return (
-      <input type="search" class="searchbar" ref="searchKey" onChange={this.inputSearchHandler} /> // When input change, we call the inputSearchHandler
+      <input type="search" className="searchbar" ref="searchKey" onChange={this.inputSearchHandler} /> // When input change, we call the inputSearchHandler
     );
   }
 });
@@ -49,12 +49,10 @@ var HomePage = React.createClass({
     console.log("Key: "+key);
   },
   render: function() {
-    var employees = [
-      {firstName: "Khoa", lastName: "Pham"},
-      {firstName: "Uyen", lastName: "Phan"},
-    ];
+    console.log(this.props.service);
+    var employees = this.props.service.getEmployees();
     return (
-      <div class="inner-container">
+      <div className="inner-container">
         <Header text="Employee Directory"/>
         <SearchBar searchHandler={this.searchHandler} /> 
         <EmployeeList employees={employees} />
@@ -64,6 +62,6 @@ var HomePage = React.createClass({
 });
 
 React.render(
-  <HomePage />,
+  <HomePage service={employeeService}/>,
   document.getElementById("container")
 );
