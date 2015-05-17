@@ -5,7 +5,7 @@ employeeService = (function() {
         var employee = null;
         var l = employees.length;
         for (var i = 0; i < l; i++ ) {
-          if (employee[i].id == id) {
+          if (employees[i].id == id) {
             employee = employees[i];
             break;
           }
