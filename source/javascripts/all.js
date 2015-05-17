@@ -45,17 +45,19 @@ var EmployeeList = React.createClass({
 });
 
 var HomePage = React.createClass({
+  getInitialState: function() {
+    return { employees: this.props.service.getEmployees() }
+  },
+
   searchHandler: function(key) { //Search handler for Homepage
     console.log("Key: "+key);
   },
   render: function() {
-    console.log(this.props.service);
-    var employees = this.props.service.getEmployees();
     return (
       <div className="inner-container">
         <Header text="Employee Directory"/>
         <SearchBar searchHandler={this.searchHandler} /> 
-        <EmployeeList employees={employees} />
+        <EmployeeList employees={this.state.employees} />
       </div>
     );
   }
