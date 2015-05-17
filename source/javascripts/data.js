@@ -16,10 +16,9 @@ employeeService = (function() {
 
       findByName = function(name) {
         var deferred = $.Deferred();
-        var employee = null;
         var results = employees.filter(function(element) {
-          var fullName = element.firstname + " " + element.lastName;
-          return fullName.toLowerCase().indexOf(searchKey.toLowerCase()) > -1;
+          var fullName = element.firstName + " " + element.lastName;
+          return fullName.toLowerCase().indexOf(name.toLowerCase()) > -1;
         });
         deferred.resolve(results);
         return deferred.promise();

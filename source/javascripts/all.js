@@ -6,6 +6,14 @@ var Header = React.createClass({
   }
 });
 
+var SearchFor = React.createClass({
+  render: function() {
+    return (
+      <h3>Search for: {this.props.searchKey}</h3>
+    )
+  }
+});
+
 var SearchBar = React.createClass({
   inputSearchHandler: function() {
     this.props.searchHandler(this.refs.searchKey.getDOMNode().value);
@@ -50,12 +58,16 @@ var HomePage = React.createClass({
   },
 
   searchHandler: function(key) { //Search handler for Homepage
-    console.log("Key: "+key);
+    this.props.service.findByName(key).done(function(result) {
+      this.setState({searchKey: key, employees: result});
+    }.bind(this)); // bind this (just for binding this variable to its parent)
   },
+
   render: function() {
     return (
       <div className="inner-container">
-        <Header text="Employee Directory"/>
+        <Header text="Employee Directory" />
+        <SearchFor searchKey={this.state.searchKey} />
         <SearchBar searchHandler={this.searchHandler} /> 
         <EmployeeList employees={this.state.employees} />
       </div>
