@@ -151,7 +151,7 @@ var App = React.createClass({
 
   searchHandler: function(key) { //Search handler for Homepage
     employeeService.findByName(key).done(function(employees) {
-      this.setState({searchKey:key, employees: employees, page: <HomePage searchKey={this.state.searchKey} searchHandler={this.searchHandler} employees={employees}/>});
+      this.setState({searchKey:key, employees: employees, page: <HomePage searchKey={key} searchHandler={this.searchHandler} employees={employees}/>});
     }.bind(this)); // bind this (just for binding this variable to its parent)
   },
 
