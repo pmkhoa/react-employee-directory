@@ -25,7 +25,7 @@ var SearchBar = React.createClass({
   // When input change, we call the inputSearchHandler
     return (
       <div className="bar bar-standar bar-header-secondary">
-        <input type="search" className="searchbar" ref="searchKey" onChange={this.inputSearchHandler} />
+        <input type="search" className="searchbar" ref="searchKey" onChange={this.inputSearchHandler} value={this.props.searchKey} />
       </div>
     );
   }
@@ -61,23 +61,13 @@ var EmployeeList = React.createClass({
 });
 
 var HomePage = React.createClass({
-  getInitialState: function() {
-    return { employees: this.props.service.getEmployees() }
-  },
-
-  searchHandler: function(key) { //Search handler for Homepage
-    this.props.service.findByName(key).done(function(result) {
-      this.setState({searchKey: key, employees: result});
-    }.bind(this)); // bind this (just for binding this variable to its parent)
-  },
-
   render: function() {
     return (
       <div className="inner-container">
         <Header text="Employee Directory" back="false"/>
-        <SearchBar searchHandler={this.searchHandler} /> 
+        <SearchBar searchKey={this.props.searchKey} searchHandler={this.props.searchHandler} /> 
         <div className="content">
-          <EmployeeList employees={this.state.employees} />
+          <EmployeeList employees={this.props.employees} />
         </div>
       </div>
     );
@@ -90,7 +80,6 @@ var EmployeePage = React.createClass({
   },
 
   componentDidMount: function() {
-    console.log(this.props.employeeId);
     this.props.service.findById(this.props.employeeId).done(function(result) {
       this.setState({employee: result});
     }.bind(this));
@@ -151,19 +140,37 @@ var EmployeePage = React.createClass({
   }
 });
 
+var App = React.createClass({
+  getInitialState: function() {
+    return {
+      searchKey: '',
+      employees: [],
+      page: null
+    }
+  },
 
-router.addRoute('', function() {
-  React.render(
-    <HomePage service={employeeService}/>,
-      document.getElementById("container")
-  );
+  searchHandler: function(key) { //Search handler for Homepage
+    employeeService.findByName(key).done(function(employees) {
+      this.setState({searchKey:key, employees: employees, page: <HomePage searchKey={this.state.searchKey} searchHandler={this.searchHandler} employees={employees}/>});
+    }.bind(this)); // bind this (just for binding this variable to its parent)
+  },
+
+  componentDidMount: function() {
+    router.addRoute('', function() {
+      this.setState({page: <HomePage searchKey={this.state.searchKey} searchHandler={this.searchHandler} employees={this.state.employees}/>});
+    }.bind(this));
+
+    router.addRoute('employees/:id', function(id) {
+      this.setState({page: <EmployeePage employeeId={id} service={employeeService}/>});
+    }.bind(this));
+    router.start();
+  },
+  render: function() {
+    return this.state.page;
+  }
 });
 
-router.addRoute('employees/:id', function(id) {
-  React.render(
-    <EmployeePage employeeId={id} service={employeeService} />,
-      document.getElementById("container")
-  );
-});
-
-router.start();
+React.render(
+  <App/>,
+  document.getElementById("container")
+);
